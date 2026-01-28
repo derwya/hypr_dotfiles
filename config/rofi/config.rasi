@@ -1,0 +1,26 @@
+configuration {
+    modi: "drun,run,filebrowser,window,calc";
+    
+    show-icons: true;
+    terminal: "kitty";
+    drun-display-format: "{name} ";
+    location: 0;
+    disable-history: false;
+    hide-scrollbar: true;
+
+    
+    run-command: "/bin/bash -c '{cmd}'";
+
+    run-shell-command: "kitty -e /bin/bash -c '{cmd}'";
+
+    
+    display-drun: " Apps ";
+    display-run: " Run ";
+    display-filebrowser: " Files ";
+    display-window: " Window ";
+    display-calc: " Calc "; 
+    
+    sidebar-mode: true;
+}
+
+@theme "tokyo-night"

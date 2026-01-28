@@ -1,0 +1,4 @@
+Config(
+  prefix: ":", // Type : to execute shell commands explicitly
+  shell: "bash",
+)

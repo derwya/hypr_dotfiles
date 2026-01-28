@@ -1,0 +1,93 @@
+/**
+ * ROFI TOKYO NIGHT THEME (Left-Side Popup)
+ * Matches Waybar margins and colors - mirrors config-right
+ */
+
+configuration {
+    font: "JetBrainsMono Nerd Font 10";
+    show-icons: false;
+}
+
+* {
+    /* Tokyo Night Color Palette */
+    bg-base:      #1a1b26;
+    bg-selected:  #7aa2f7; /* Bright Blue */
+    fg-text:      #c0caf5;
+    fg-selected:  #15161e; /* Dark text for contrast on blue */
+    border-col:   #7aa2f7;
+    
+    background-color: @bg-base;
+    text-color:       @fg-text;
+    margin:           0;
+    padding:          0;
+}
+
+window {
+    transparency: "real";
+    location: north west;      /* Changed from north east */
+    anchor:   north west;      /* Changed from north east */
+    
+    /* Align with your Waybar (Left margin 12px, Height 38px + margin) */
+    x-offset: 12px;            /* Changed from -12px */
+    y-offset: 20px;
+
+    width: 280px;
+    border: 2px;
+    border-color: @border-col;
+    border-radius: 10px;
+    background-color: @bg-base;
+    padding: 10px;
+}
+
+mainbox {
+    children: [ inputbar, listview ];
+    background-color: transparent;
+    spacing: 10px;
+}
+
+/* Input bar for TLP menu */
+inputbar {
+    background-color: transparent;
+    children: [ prompt, entry ];
+    text-color: @border-col;
+}
+
+prompt {
+    background-color: transparent;
+    text-color: inherit;
+    padding: 0px 5px 0px 0px;
+}
+
+entry {
+    background-color: transparent;
+    text-color: @fg-text;
+    placeholder: "Search...";
+    placeholder-color: #565f89;
+}
+
+listview {
+    lines: 2;                  /* Fewer items for TLP menu */
+    columns: 1;
+    scrollbar: false;
+    background-color: transparent;
+}
+
+element {
+    padding: 8px 10px;
+    border-radius: 5px;
+    background-color: transparent;
+    text-color: @fg-text;
+    cursor: pointer;
+}
+
+element selected {
+    background-color: @bg-selected;
+    text-color: @fg-selected;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+    vertical-align: 0.5;
+}
+

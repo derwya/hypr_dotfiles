@@ -1,0 +1,111 @@
+{
+    "layer": "overlay",
+    "position": "bottom",
+    "ipc": true,
+    "height": 50,
+    "margin-bottom": 0,
+    "spacing": 0,
+    "on-sigusr1": "hide",
+    "on-sigusr2": "show",
+    
+    "modules-left": ["hyprland/workspaces"],
+    "modules-center": ["hyprland/window"],
+    "modules-right": ["custom/media", "custom/media-prev", "custom/media-play", "custom/media-next", "custom/volume"],
+    
+    "hyprland/workspaces": {
+        "format": " {icon} ",
+        "on-click": "activate",
+        "format-icons": {
+            "1": "1",
+            "2": "2",
+            "3": "3",
+            "4": "4",
+            "5": "5",
+            "urgent": "",
+            "focused": "",
+            "default": ""
+        },
+        "persistent-workspaces": {
+            "*": 5
+        }
+    },
+    
+    "hyprland/window": {
+        "format": "{title}",
+        "max-length": 40,
+        "separate-outputs": true,
+        "rewrite": {
+            "(.*) — Mozilla Firefox": "󰈹 $1",
+            "(.*) - Visual Studio Code": "󰨞 $1",
+            "(.*) - Brave": "󰖟 $1",
+            "(.*) - Discord": "󰙯 $1",
+            "(.*) - Thunar": "󰉋 $1",
+            "Alacritty": "󰆍 Terminal",
+            "kitty": "󰆍 Terminal",
+            "foot": "󰆍 Terminal",
+            "": "󰇄 Desktop"
+        }
+    },
+    
+    "custom/media": {
+        "format": "{icon} {text}",
+        "return-type": "json",
+        "max-length": 50,
+        "format-icons": {
+            "spotify": "󰓇",
+            "vlc": "󰕼",
+            "mpv": "󰕼",
+            "youtube": "󰗃",
+            "youtubemusic": "󰗃",
+            "soundcloud": "󰓀",
+            "tidal": "󰓇",
+            "deezer": "󰓃",
+            "apple-music": "󰀥",
+            "zen": "󰈹",
+            "firefox": "󰈹",
+            "chromium": "󰊯",
+            "brave": "󰖟",
+            "edge": "󰇩",
+            "opera": "󰊴",
+            "default": "󰝚"
+        },
+        "escape": true,
+        "exec": "~/.config/waybar/scripts/mediaplayer.py 2>/dev/null",
+        "interval": 2,
+        "on-click": "playerctl play-pause",
+        "on-scroll-up": "playerctl volume 0.05+",
+        "on-scroll-down": "playerctl volume 0.05-"
+    },
+
+    "custom/media-prev": {
+        "format": "󰒮",
+        "on-click": "playerctl previous",
+        "tooltip": false
+    },
+    
+    "custom/media-play": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "~/.config/waybar/scripts/media-controls.sh play 2>/dev/null",
+        "interval": 1,
+        "on-click": "playerctl play-pause",
+        "tooltip": false
+    },
+    
+    "custom/media-next": {
+        "format": "󰒭",
+        "on-click": "playerctl next",
+        "tooltip": false
+    },
+    
+    "custom/volume": {
+        "format": "{icon} {text}%",
+        "return-type": "json",
+        "exec": "~/.config/waybar/scripts/get-volume.sh 2>/dev/null",
+        "interval": 1,
+        "format-icons": ["󰕿", "󰖀", "󰕾"],
+        "on-click": "~/.config/waybar/scripts/toggle-mute.sh",
+        "on-scroll-down": "~/.config/waybar/scripts/app-volume.sh up",
+        "on-scroll-up": "~/.config/waybar/scripts/app-volume.sh down"
+    }
+}

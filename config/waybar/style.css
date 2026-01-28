@@ -1,0 +1,506 @@
+/* ========================================
+   WAYBAR TOKYO NIGHT THEME
+   Official Tokyo Night color palette
+   ======================================== */
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
+    font-size: 13px;
+    font-weight: bold;
+    min-height: 0;
+    border: none;
+    border-radius: 0;
+}
+
+window#waybar {
+    background: transparent;
+    color: #c0caf5;
+}
+
+tooltip {
+    background: #1a1b26;
+    border: 1px solid #7aa2f7;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    padding: 8px;
+}
+
+tooltip label {
+    color: #c0caf5;
+    padding: 4px 8px;
+}
+
+/* ========================================
+   PANEL CONTAINERS
+   ======================================== */
+
+.modules-left, .modules-center, .modules-right {
+    background: #1a1b26;
+    border-radius: 12px;
+    padding: 4px 8px;
+    margin: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(86, 95, 137, 0.3);
+}
+
+/* Module spacing and transitions */
+.modules-left > widget,
+.modules-center > widget,
+.modules-right > widget {
+    padding: 4px 10px;
+    margin: 2px 3px;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover effect with Tokyo Night blue glow */
+.modules-left > widget:hover,
+.modules-center > widget:hover,
+.modules-right > widget:hover {
+    background: rgba(122, 162, 247, 0.15);
+    color: #7aa2f7;
+    box-shadow: 0 0 4px rgba(122, 162, 247, 0.3);
+}
+
+/* ========================================
+   LEFT PANEL: Fuzzel, CPU, Memory, Battery
+   ======================================== */
+
+#custom-fuzzel,
+#custom-launcher {
+    color: #bb9af7;
+    font-size: 16px;
+    padding-right: 12px;
+    margin-right: 4px;
+}
+
+#custom-fuzzel:hover,
+#custom-launcher:hover {
+    color: #c0a7f7;
+    text-shadow: 0 0 12px rgba(187, 154, 247, 0.6);
+}
+
+#cpu {
+    color: #f7768e;
+}
+
+#cpu.warning {
+    color: #ff9e64;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+#cpu.critical {
+    color: #f7768e;
+    animation: blink 0.5s linear infinite;
+}
+
+#memory {
+    color: #e0af68;
+}
+
+#memory.warning {
+    color: #ff9e64;
+}
+
+#memory.critical {
+    color: #f7768e;
+}
+
+#battery {
+    color: #9ece6a;
+}
+
+#battery.warning {
+    color: #ff9e64;
+}
+
+#battery.critical:not(.charging) {
+    color: #f7768e;
+    animation: blink 0.5s linear infinite;
+}
+
+#battery.charging {
+    color: #7dcfff;
+}
+
+/* ========================================
+   LEFT PANEL: Battery with TLP control
+   ======================================== */
+
+#battery.battery-left {
+    color: #9ece6a;
+}
+
+#battery.battery-left:hover {
+    background: rgba(158, 206, 106, 0.15);
+    color: #b9f27c;
+    box-shadow: 0 0 4px rgba(158, 206, 106, 0.3);
+}
+
+#battery.battery-left.warning {
+    color: #ff9e64;
+}
+
+#battery.battery-left.critical:not(.charging) {
+    color: #f7768e;
+    animation: blink 0.5s linear infinite;
+}
+
+#battery.battery-left.charging {
+    color: #7dcfff;
+}
+
+#battery.battery-left.tlp-disabled {
+    color: #565f89;
+}
+
+/* ========================================
+   CENTER PANEL: Clock
+   ======================================== */
+
+#clock {
+    color: #c0caf5;
+    font-size: 14px;
+    font-weight: 900;
+    padding: 4px 16px;
+    text-shadow: 0 0 4px rgba(192, 202, 245, 0.2);
+}
+
+#clock:hover {
+    color: #ffffff;
+    text-shadow: 0 0 12px rgba(192, 202, 245, 0.4);
+}
+
+/* ========================================
+   RIGHT PANEL: Updates, Layout, Speaker, 
+   Bluetooth, WiFi, Notifications
+   ======================================== */
+
+#custom-updates {
+    color: #ff9e64;
+}
+
+#custom-updates.has-updates {
+    color: #f7768e;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+#language {
+    color: #7aa2f7;
+    padding: 0 8px;
+}
+
+/* Audio */
+#wireplumber,
+#pulseaudio {
+    color: #7dcfff;
+}
+
+#wireplumber.muted,
+#pulseaudio.muted {
+    color: #565f89;
+    text-decoration: line-through;
+}
+
+/* Bluetooth */
+#bluetooth {
+    color: #bb9af7;
+}
+
+#bluetooth.connected {
+    color: #bb9af7;
+}
+
+#bluetooth.off,
+#bluetooth.disabled {
+    color: #565f89;
+}
+
+/* Network */
+#network {
+    color: #7aa2f7;
+}
+
+#network.disconnected,
+#network.disabled {
+    color: #565f89;
+}
+
+#network.linked {
+    color: #e0af68;
+}
+
+/* System tray */
+#tray {
+    padding: 0 8px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: rgba(247, 118, 142, 0.2);
+    border-radius: 8px;
+}
+
+/* Notifications */
+#custom-notification {
+    color: #c0caf5;
+    padding-left: 12px;
+    padding-right: 8px;
+    border-left: 1px solid rgba(86, 95, 137, 0.4);
+    margin-left: 6px;
+}
+
+#custom-notification.has-notifications {
+    color: #7aa2f7;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* ========================================
+   BOTTOM PANEL (Workspaces)
+   ======================================== */
+
+window#waybar.bottom {
+    background: transparent;
+}
+
+window#waybar.bottom .modules-left,
+window#waybar.bottom .modules-center,
+window#waybar.bottom .modules-right {
+    background: #1a1b26;
+    border: 1px solid rgba(122, 162, 247, 0.4);
+    border-radius: 16px;
+    padding: 0 8px;
+    margin: 6px 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+#workspaces button {
+    padding: 0;
+    margin: 0 3px;
+    color: #565f89;
+    background: rgba(86, 95, 137, 0.15);
+    border-radius: 10px;
+    min-width: 32px;
+    min-height: 32px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#workspaces button:hover {
+    background: rgba(122, 162, 247, 0.25);
+    color: #7aa2f7;
+    box-shadow: 0 0 5px rgba(122, 162, 247, 0.3);
+}
+
+#workspaces button.active {
+    color: #1a1b26;
+    background: linear-gradient(135deg, #7aa2f7 0%, #bb9af7 100%);
+    box-shadow: 0 0 5px rgba(122, 162, 247, 0.5);
+    font-weight: 900;
+}
+
+#workspaces button.urgent {
+    color: #1a1b26;
+    background: #f7768e;
+    box-shadow: 0 0 5px rgba(247, 118, 142, 0.5);
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+/* Main media info display */
+#custom-media {
+    padding: 0 15px;
+    margin: 0 5px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* App-specific colors */
+#custom-media.spotify {
+    background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%);
+    color: #000;
+}
+
+#custom-media.youtubemusic {
+    background: linear-gradient(135deg, #FF0000 0%, #ff4444 100%);
+    color: #fff;
+}
+
+#custom-media.youtube {
+    background: linear-gradient(135deg, #FF0000 0%, #cc0000 100%);
+    color: #fff;
+}
+
+#custom-media.soundcloud {
+    background: linear-gradient(135deg, #FF5500 0%, #ff7700 100%);
+    color: #fff;
+}
+
+#custom-media.tidal {
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    color: #fff;
+}
+
+#custom-media.deezer {
+    background: linear-gradient(135deg, #FF0092 0%, #ff33aa 100%);
+    color: #fff;
+}
+
+#custom-media.apple-music {
+    background: linear-gradient(135deg, #FA243C 0%, #ff5566 100%);
+    color: #fff;
+}
+
+#custom-media.vlc {
+    background: linear-gradient(135deg, #FF8800 0%, #ffaa33 100%);
+    color: #000;
+}
+
+#custom-media.mpv {
+    background: linear-gradient(135deg, #6441a5 0%, #7d5bbe 100%);
+    color: #fff;
+}
+
+#custom-media.firefox,
+#custom-media.zen {
+    background: linear-gradient(135deg, #FF6611 0%, #ff8833 100%);
+    color: #fff;
+}
+
+#custom-media.chromium {
+    background: linear-gradient(135deg, #4285F4 0%, #5a9aff 100%);
+    color: #fff;
+}
+
+#custom-media.brave {
+    background: linear-gradient(135deg, #FB542B 0%, #ff7755 100%);
+    color: #fff;
+}
+
+#custom-media.edge {
+    background: linear-gradient(135deg, #0078D4 0%, #3399ff 100%);
+    color: #fff;
+}
+
+#custom-media.opera {
+    background: linear-gradient(135deg, #FF1B2D 0%, #ff4455 100%);
+    color: #fff;
+}
+
+#custom-media.default {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #fff;
+}
+
+/* Control buttons */
+#custom-media-prev,
+#custom-media-play,
+#custom-media-next {
+    padding: 0 10px;
+    margin: 0 2px;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+#custom-media-prev.active,
+#custom-media-next.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+#custom-media-prev.active:hover,
+#custom-media-next.active:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#custom-media-play.playing {
+    background: rgba(29, 185, 84, 0.3);
+    color: #1DB954;
+}
+
+#custom-media-play.paused {
+    background: rgba(255, 107, 107, 0.3);
+    color: #ff6b6b;
+}
+
+#custom-media-play:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#custom-media-prev.inactive,
+#custom-media-play.inactive,
+#custom-media-next.inactive {
+    opacity: 0;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+}
+
+/* Hover effects */
+#custom-media:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation when track changes */
+#custom-media.playing {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+#custom-volume {
+    padding: 0 12px;
+    margin: 0 5px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+#custom-volume.system {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+#custom-volume.app {
+    background: rgba(99, 102, 241, 0.3);
+    color: #818cf8;
+}
+
+#custom-volume.muted {
+    background: rgba(255, 107, 107, 0.3);
+    color: #ff6b6b;
+}
+
+#custom-volume:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes blink {
+    to {
+        background-color: rgba(247, 118, 142, 0.3);
+        color: #f7768e;
+        border-radius: 6px;
+    }
+}
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+#cpu.warning,
+#custom-updates.has-updates,
+#custom-notification.has-notifications,
+#custom-media.playing {
+    animation: custom_pulse 2s ease-in-out infinite;
+}

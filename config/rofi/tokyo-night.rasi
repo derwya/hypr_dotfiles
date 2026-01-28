@@ -1,0 +1,118 @@
+* {
+    bg-col:  #1a1b26;
+    bg-col-light: #24283b;
+    border-col: #7aa2f7;
+    selected-col: #24283b;
+    blue: #7aa2f7;
+    fg-col: #c0caf5;
+    fg-col2: #bb9af7;
+    grey: #565f89;
+    width: 600;
+    font: "JetBrainsMono Nerd Font 12";
+}
+
+element-text, element-icon , mode-switcher {
+    background-color: inherit;
+    text-color:       inherit;
+}
+
+window {
+    height: 500px;
+    border: 2px;
+    border-color: @border-col;
+    background-color: @bg-col;
+    border-radius: 10px;
+}
+
+mainbox {
+    background-color: @bg-col;
+}
+
+inputbar {
+    children: [prompt,entry];
+    background-color: @bg-col-light;
+    border-radius: 5px;
+    padding: 8px;
+    margin: 10px;
+}
+
+prompt {
+    background-color: @bg-col-light;
+    padding: 6px;
+    text-color: @blue;
+    border-radius: 3px;
+    margin: 0px 10px 0px 0px;
+}
+
+textbox-prompt-colon {
+    expand: false;
+    str: ":";
+}
+
+entry {
+    padding: 6px;
+    text-color: @fg-col;
+    background-color: @bg-col-light;
+}
+
+listview {
+    border: 0px 0px 0px;
+    padding: 6px 0px 0px;
+    margin: 10px 10px 0px 10px;
+    columns: 1;
+    lines: 8;
+    background-color: @bg-col;
+}
+
+element {
+    padding: 8px;
+    background-color: @bg-col;
+    text-color: @fg-col;
+    border-radius: 5px;
+}
+
+element-icon {
+    size: 25px;
+    margin: 0px 10px 0px 0px;
+}
+
+element selected {
+    background-color: @selected-col;
+    text-color: @blue;
+}
+
+mode-switcher {
+    spacing: 0;
+    background-color: @bg-col-light;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 5px;
+}
+
+button {
+    padding: 8px;
+    background-color: @bg-col-light;
+    text-color: @grey;
+    vertical-align: 0.5;
+    horizontal-align: 0.5;
+    border-radius: 5px;
+}
+
+button selected {
+    background-color: @bg-col;
+    text-color: @blue;
+}
+
+message {
+    background-color: @bg-col-light;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+textbox {
+    padding: 6px;
+    margin: 10px;
+    text-color: @fg-col;
+    background-color: @bg-col-light;
+}

@@ -1,0 +1,44 @@
+* {
+  all: unset;
+  font-family: "JetBrainsMono Nerd Font", sans-serif;
+  font-size: 1.2rem; /* Scaled for 1.67 monitor */
+}
+
+#window {
+  background: transparent;
+}
+
+#entry {
+  background-color: #1a1b26; /* Tokyo Night BG */
+  border: 2px solid #7aa2f7; /* Tokyo Night Blue */
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  color: #c0caf5;
+}
+
+#match {
+  background-color: #1a1b26;
+  padding: 12px;
+  margin: 4px 0;
+  border-radius: 8px;
+  color: #c0caf5;
+  transition: all 0.1s ease;
+}
+
+#match:selected {
+  background-color: #7aa2f7; /* Highlight Blue */
+  color: #15161e; /* Dark Text on Highlight */
+}
+
+#plugin {
+  background-color: #1a1b26;
+  border: 1px solid #414868;
+  border-radius: 12px;
+  padding: 8px;
+}
+
+/* Icons */
+#img {
+  margin-right: 12px;
+}

@@ -1,0 +1,147 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 38,
+    "margin-top": 8,
+    "margin-left": 12,
+    "margin-right": 12,
+    "spacing": 10,
+    "on-sigusr1": "hide",
+    "on-sigusr2": "show",
+    "ipc": true,
+    
+    "modules-left": ["custom/launcher", "cpu", "memory", "battery"],
+    "modules-center": ["clock"],
+    "modules-right": ["custom/updates", "hyprland/language", "wireplumber", "bluetooth", "network", "tray", "custom/notification"],
+
+    "custom/launcher": {
+        "format": "󰣇",
+        "tooltip": false,
+        "on-click": "fuzzel"
+    },
+
+    "cpu": {
+        "interval": 5,
+        "format": "󰻠 {usage}% ",
+        "tooltip": true,
+        "max-length": 10,
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+
+    "memory": {
+        "interval": 10,
+        "format": "󰍛 {percentage}%",
+        "tooltip": true,
+        "tooltip-format": "{used:0.1f}GB / {total:0.1f}GB",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+
+     "battery": {
+        "interval": 30,
+        "states": {
+            "good": 80,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": " {icon} {capacity}% ",
+        "format-charging": " 󰂄 {capacity}% ",
+        "format-plugged": " 󰚥 {capacity}% ",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "tooltip": true,
+        "tooltip-format": "{capacity}% | {timeTo}",
+        "on-click": "~/.config/rofi/rofi-tlp.sh -theme ~/.config/rofi/config-left.rasi -class rofi-left"
+    },
+   
+
+    "clock": {
+        "format": "󰥔 {:%H:%M  |  󰃭 %d %b}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "month",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "format": {
+                "months": "<span color='#7aa2f7'><b>{}</b></span>",
+                "days": "<span color='#c0caf5'>{}</span>",
+                "weeks": "<span color='#bb9af7'>W{}</span>",
+                "weekdays": "<span color='#9ece6a'>{}</span>",
+                "today": "<span color='#f7768e'><b><u>{}</u></b></span>"
+            }
+        }
+    },
+
+    "custom/updates": {
+        "format": " 󰏔 {} ",
+        "interval": 3600,
+        "exec": "checkupdates 2>/dev/null | wc -l || echo 0",
+        "on-click": "kitty -e yay",
+        "tooltip": true,
+        "tooltip-format": "{} updates"
+    },
+
+    "hyprland/language": {
+        "format": " 󰌌 {short} ",
+        "on-click": "~/.config/waybar/scripts/switch-layout.sh"
+    },
+
+    "bluetooth": {
+        "format": " {status}",
+        "on-click": "rofi-bluetooth -theme ~/.config/rofi/config-right.rasi -class rofi-right",
+        "tooltip": false 
+    },
+
+    "wireplumber": {
+        "format": " {icon} {volume}% ",
+        "format-muted": "󰝟 ",
+        "format-icons": ["󰕿", "󰖀", "󰕾"],
+        "on-click": "~/.config/rofi/rofi-audio.sh -theme ~/.config/rofi/config-right.rasi -class rofi-right",
+        "on-click-right": "pavucontrol",
+  "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ --limit 1.0",
+  "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- --limit 1.0",
+        "max-volume": 100,
+        "tooltip": true
+    },
+
+    "network": {
+        "format-wifi": " 󰤨 {signalStrength}% ",
+        "format-ethernet": "󰈀 ",
+        "format-disconnected": "󰤭 ",
+        "format-disabled": "󰤭 ",
+        "tooltip-format": "{ifname}: {ipaddr}/{cidr}\n󰤨 {essid}",
+        "on-click": "networkmanager_dmenu", 
+        "on-click-right": "nm-connection-editor"
+    },
+
+    "tray": {
+        "icon-size": 20,
+        "spacing": 3
+    },
+
+    "custom/notification": {
+        "tooltip": false,
+        "format": "{icon} ",
+        "format-icons": {
+            "notification": "󱅫",
+            "none": "󰂚",
+            "dnd-notification": "󱅫",
+            "dnd-none": "󰂛",
+            "inhibited-notification": "󱅫",
+            "inhibited-none": "󰂚",
+            "dnd-inhibited-notification": "󱅫",
+            "dnd-inhibited-none": "󰂛"
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
+    }
+}
