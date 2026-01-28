@@ -1,21 +1,15 @@
-# Системні файли
 .DS_Store
 Thumbs.db
 
-# Тимчасові файли та бекапи
 *.bak
 *.old
 *.swp
 *.log
 
-# Кеш
 .cache/
 __pycache__/
 
-# Rust build files (вони дуже важкі, краще скомпілювати на новій машині)
 waybar_auto_hide/target/
 waybar_auto_hide/Cargo.lock
 
-# Виняток: якщо ви хочете зберегти бінарник, розкоментуйте рядок нижче,
-# але краще перемістити його в папку bin/
 # !waybar_auto_hide/target/release/waybar_auto_hide
