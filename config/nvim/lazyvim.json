@@ -4,6 +4,7 @@
     "lazyvim.plugins.extras.coding.yanky",
     "lazyvim.plugins.extras.dap.core",
     "lazyvim.plugins.extras.editor.aerial",
+    "lazyvim.plugins.extras.editor.leap",
     "lazyvim.plugins.extras.lang.clangd",
     "lazyvim.plugins.extras.lang.cmake",
     "lazyvim.plugins.extras.lang.docker",
@@ -16,6 +17,8 @@
     "lazyvim.plugins.extras.lang.toml",
     "lazyvim.plugins.extras.lang.yaml",
     "lazyvim.plugins.extras.lang.zig",
+    "lazyvim.plugins.extras.lsp.neoconf",
+    "lazyvim.plugins.extras.util.dot",
     "lazyvim.plugins.extras.util.mini-hipatterns",
     "lazyvim.plugins.extras.util.project"
   ],
