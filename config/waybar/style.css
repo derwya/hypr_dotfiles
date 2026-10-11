@@ -35,7 +35,7 @@ tooltip label {
    ======================================== */
 
 .modules-left, .modules-center, .modules-right {
-    background: #1a1b26;
+    background: rgba(26, 27, 38, 0.82);
     border-radius: 12px;
     padding: 4px 8px;
     margin: 4px;
@@ -43,12 +43,12 @@ tooltip label {
     border: 1px solid rgba(86, 95, 137, 0.3);
 }
 
-/* Module spacing and transitions */
+/* Module spacing and transitions - CONSISTENT SPACING */
 .modules-left > widget,
 .modules-center > widget,
 .modules-right > widget {
-    padding: 4px 10px;
-    margin: 2px 3px;
+    padding: 4px 8px;
+    margin: 2px 4px;
     border-radius: 8px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -63,18 +63,15 @@ tooltip label {
 }
 
 /* ========================================
-   LEFT PANEL: Fuzzel, CPU, Memory, Battery
+   LEFT PANEL: Launcher, CPU, Memory, GPU
    ======================================== */
 
-#custom-fuzzel,
 #custom-launcher {
     color: #bb9af7;
     font-size: 16px;
-    padding-right: 12px;
-    margin-right: 4px;
+    padding: 4px 8px;
 }
 
-#custom-fuzzel:hover,
 #custom-launcher:hover {
     color: #c0a7f7;
     text-shadow: 0 0 12px rgba(187, 154, 247, 0.6);
@@ -82,6 +79,7 @@ tooltip label {
 
 #cpu {
     color: #f7768e;
+    padding: 4px 8px;
 }
 
 #cpu.warning {
@@ -94,8 +92,28 @@ tooltip label {
     animation: blink 0.5s linear infinite;
 }
 
+/* CPU temperature sits right after CPU usage and reads as part of it */
+#cpu {
+    padding-right: 2px;
+}
+
+#temperature {
+    color: alpha(#f7768e, 0.65);
+    padding: 4px 8px 4px 0;
+}
+
+#temperature.warning {
+    color: #ff9e64;
+}
+
+#temperature.critical {
+    color: #f7768e;
+    animation: blink 0.5s linear infinite;
+}
+
 #memory {
     color: #e0af68;
+    padding: 4px 8px;
 }
 
 #memory.warning {
@@ -106,51 +124,21 @@ tooltip label {
     color: #f7768e;
 }
 
-#battery {
+#custom-gpu {
     color: #9ece6a;
+    padding: 4px 8px;
 }
 
-#battery.warning {
+#custom-gpu.warning {
     color: #ff9e64;
 }
 
-#battery.critical:not(.charging) {
+#custom-gpu.critical {
     color: #f7768e;
-    animation: blink 0.5s linear infinite;
+    animation: pulse 2s ease-in-out infinite;
 }
 
-#battery.charging {
-    color: #7dcfff;
-}
-
-/* ========================================
-   LEFT PANEL: Battery with TLP control
-   ======================================== */
-
-#battery.battery-left {
-    color: #9ece6a;
-}
-
-#battery.battery-left:hover {
-    background: rgba(158, 206, 106, 0.15);
-    color: #b9f27c;
-    box-shadow: 0 0 4px rgba(158, 206, 106, 0.3);
-}
-
-#battery.battery-left.warning {
-    color: #ff9e64;
-}
-
-#battery.battery-left.critical:not(.charging) {
-    color: #f7768e;
-    animation: blink 0.5s linear infinite;
-}
-
-#battery.battery-left.charging {
-    color: #7dcfff;
-}
-
-#battery.battery-left.tlp-disabled {
+#custom-gpu.gpu-error {
     color: #565f89;
 }
 
@@ -162,7 +150,7 @@ tooltip label {
     color: #c0caf5;
     font-size: 14px;
     font-weight: 900;
-    padding: 4px 16px;
+    padding: 4px 12px;
     text-shadow: 0 0 4px rgba(192, 202, 245, 0.2);
 }
 
@@ -172,12 +160,12 @@ tooltip label {
 }
 
 /* ========================================
-   RIGHT PANEL: Updates, Layout, Speaker, 
-   Bluetooth, WiFi, Notifications
+   RIGHT PANEL: All modules with consistent spacing
    ======================================== */
 
 #custom-updates {
     color: #ff9e64;
+    padding: 4px 8px;
 }
 
 #custom-updates.has-updates {
@@ -187,24 +175,23 @@ tooltip label {
 
 #language {
     color: #7aa2f7;
-    padding: 0 8px;
+    padding: 4px 8px;
 }
 
-/* Audio */
 #wireplumber,
 #pulseaudio {
     color: #7dcfff;
+    padding: 4px 8px;
 }
 
 #wireplumber.muted,
 #pulseaudio.muted {
     color: #565f89;
-    text-decoration: line-through;
 }
 
-/* Bluetooth */
 #bluetooth {
     color: #bb9af7;
+    padding: 4px 8px;
 }
 
 #bluetooth.connected {
@@ -216,9 +203,9 @@ tooltip label {
     color: #565f89;
 }
 
-/* Network */
 #network {
     color: #7aa2f7;
+    padding: 4px 8px;
 }
 
 #network.disconnected,
@@ -230,9 +217,8 @@ tooltip label {
     color: #e0af68;
 }
 
-/* System tray */
 #tray {
-    padding: 0 8px;
+    padding: 4px 8px;
 }
 
 #tray > .passive {
@@ -245,13 +231,9 @@ tooltip label {
     border-radius: 8px;
 }
 
-/* Notifications */
 #custom-notification {
     color: #c0caf5;
-    padding-left: 12px;
-    padding-right: 8px;
-    border-left: 1px solid rgba(86, 95, 137, 0.4);
-    margin-left: 6px;
+    padding: 4px 8px;
 }
 
 #custom-notification.has-notifications {
@@ -270,7 +252,7 @@ window#waybar.bottom {
 window#waybar.bottom .modules-left,
 window#waybar.bottom .modules-center,
 window#waybar.bottom .modules-right {
-    background: #1a1b26;
+    background: rgba(26, 27, 38, 0.82);
     border: 1px solid rgba(122, 162, 247, 0.4);
     border-radius: 16px;
     padding: 0 8px;
@@ -308,10 +290,39 @@ window#waybar.bottom .modules-right {
     box-shadow: 0 0 5px rgba(247, 118, 142, 0.5);
 }
 
+#window {
+    color: #c0caf5;
+    padding: 4px 12px;
+}
+
 /* ========================================
    ANIMATIONS
    ======================================== */
-/* Main media info display */
+
+@keyframes blink {
+    to {
+        background-color: rgba(247, 118, 142, 0.3);
+        color: #f7768e;
+        border-radius: 6px;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* ========================================
+   MEDIA PLAYER CONTROLS (Bottom Bar Right)
+   ======================================== */
+
 #custom-media {
     padding: 0 15px;
     margin: 0 5px;
@@ -320,7 +331,6 @@ window#waybar.bottom .modules-right {
     transition: all 0.3s ease;
 }
 
-/* App-specific colors */
 #custom-media.spotify {
     background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%);
     color: #000;
@@ -397,6 +407,14 @@ window#waybar.bottom .modules-right {
     color: #fff;
 }
 
+#custom-media:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+#custom-media.playing {
+    animation: pulse 2s ease-in-out infinite;
+}
+
 /* Control buttons */
 #custom-media-prev,
 #custom-media-play,
@@ -406,17 +424,13 @@ window#waybar.bottom .modules-right {
     border-radius: 6px;
     font-size: 16px;
     transition: all 0.3s ease;
+    color: #c0caf5;
 }
 
-#custom-media-prev.active,
-#custom-media-next.active {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-}
-
-#custom-media-prev.active:hover,
-#custom-media-next.active:hover {
-    background: rgba(255, 255, 255, 0.2);
+#custom-media-prev:hover,
+#custom-media-next:hover {
+    background: rgba(122, 162, 247, 0.2);
+    color: #7aa2f7;
 }
 
 #custom-media-play.playing {
@@ -430,44 +444,17 @@ window#waybar.bottom .modules-right {
 }
 
 #custom-media-play:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(122, 162, 247, 0.2);
 }
 
-#custom-media-prev.inactive,
-#custom-media-play.inactive,
-#custom-media-next.inactive {
-    opacity: 0;
-    min-width: 0;
-    padding: 0;
-    margin: 0;
-}
-
-/* Hover effects */
-#custom-media:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-/* Animation when track changes */
-#custom-media.playing {
-    animation: pulse 2s ease-in-out infinite;
-}
-
+/* Volume control */
 #custom-volume {
     padding: 0 12px;
     margin: 0 5px;
     border-radius: 8px;
     font-weight: 500;
     transition: all 0.3s ease;
-}
-
-#custom-volume.system {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-}
-
-#custom-volume.app {
-    background: rgba(99, 102, 241, 0.3);
-    color: #818cf8;
+    color: #7dcfff;
 }
 
 #custom-volume.muted {
@@ -476,31 +463,27 @@ window#waybar.bottom .modules-right {
 }
 
 #custom-volume:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(125, 220, 255, 0.2);
 }
 
-@keyframes blink {
-    to {
-        background-color: rgba(247, 118, 142, 0.3);
-        color: #f7768e;
-        border-radius: 6px;
-    }
-}
-@keyframes pulse {
-    0% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.7;
-    }
-    100% {
-        opacity: 1;
-    }
+/* ========================================
+   ICON CONSISTENCY & STATE COLORS (top bar)
+   ======================================== */
+
+/* Icon-only modules render glyphs smaller than text modules; even them out */
+#bluetooth,
+#network,
+#custom-notification {
+    font-size: 15px;
 }
 
-#cpu.warning,
-#custom-updates.has-updates,
-#custom-notification.has-notifications,
-#custom-media.playing {
-    animation: custom_pulse 2s ease-in-out infinite;
+/* Bluetooth: purple = on, cyan = device connected, dim = off */
+#bluetooth.connected {
+    color: #7dcfff;
+}
+
+/* Network: make a lost connection obvious */
+#network.disconnected,
+#network.disabled {
+    color: #f7768e;
 }
