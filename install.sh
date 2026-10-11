@@ -1,34 +1,36 @@
 #!/bin/bash
 
-DOTFILES_DIR="$HOME/dotfiles"
+DOTFILES_DIR="$HOME/hypr_dotfiles"
 CONFIG_DIR="$HOME/.config"
 BIN_DIR="$HOME/.local/bin"
 
 if ! command -v yay &>/dev/null; then
   echo "Installing yay..."
   sudo pacman -S --needed git base-devel
-  git clone https://aur.archlinux.org/yay.bin.git
-  cd yay-bin
+  git clone https://aur.archlinux.org/yay.git
+  cd yay
   makepkg -si
   cd ..
-  rm -rf yay-bin
+  rm -rf yay
 fi
 
 echo "Installing System Packages..."
 yay -S --needed \
-  hyprland hyprpaper hyprlock hypridle xdg-desktop-portal-hyprland \
-  waybar rofi-wayland swaync \
-  kitty btop anyrun-git \
-  wl-clipboard cliphist grim slurp \
-  network-manager-applet brightnessctl \
-  nwg-look nwg-displays \
+  hyprland hyprlock hypridle xdg-desktop-portal-hyprland \
+  waybar rofi rofi-calc swaync quickshell pyprland swaybg \
+  kitty btop yazi \
+  wl-clipboard cliphist grim slurp jq playerctl \
+  network-manager-applet networkmanager brightnessctl bluez bluez-utils \
+  nwg-look nwg-displays pavucontrol \
   polkit-gnome \
   pacman-contrib \
+  chntpw \
   rustup
 
 echo "Installing Apps..."
 yay -S --needed \
   neovim zen-browser-bin vesktop-bin spotify \
+  imv mpv zathura zathura-pdf-mupdf \
   emacs ripgrep fd lazygit
 
 echo "Installing Fonts..."
@@ -43,7 +45,7 @@ yay -S --needed \
 
 echo "Installing Theme Dependencies..."
 yay -S --needed \
-  qt5ct qt6ct kvantum \
+  qt5ct qt6ct-kde kvantum \
   gtk3 gtk4 \
   xsettingsd
 
@@ -77,6 +79,23 @@ create_link "gtk-4.0"
 create_link "qt5ct"
 create_link "qt6ct"
 create_link "vesktop"
+create_link "quickshell"
+create_link "swaync"
+create_link "pypr"
+create_link "mimeapps.list"
+
+# Desktop entry overrides (open yazi/nvim inside kitty)
+mkdir -p "$HOME/.local/share/applications"
+for f in "$DOTFILES_DIR/local/share/applications/"*.desktop; do
+  ln -sf "$f" "$HOME/.local/share/applications/$(basename "$f")"
+done
+update-desktop-database "$HOME/.local/share/applications" 2>/dev/null
+
+# Helper commands on PATH
+mkdir -p "$BIN_DIR"
+for f in bt-dualboot-sync rofi-power-menu; do
+  ln -sf "$DOTFILES_DIR/scripts/$f" "$BIN_DIR/$f"
+done
 
 mkdir -p "$HOME/Pictures/wallpapers/tokyonight-wallpapers"
 ln -sf "$DOTFILES_DIR/wallpapers/"* "$HOME/Pictures/wallpapers/tokyonight-wallpapers/"
