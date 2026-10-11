@@ -1,0 +1,90 @@
+/* swaync: Tokyo Night on top of the stock theme (imported, then recolored),
+   so swaync updates keep working. Glass blur comes from Hyprland layer rules. */
+@import url("file:///etc/xdg/swaync/style.css");
+
+:root {
+  --cc-bg: rgba(26, 27, 38, 0.93);
+  --noti-border-color: rgba(122, 162, 247, 0.35);
+  --noti-bg: 26, 27, 38;
+  --noti-bg-alpha: 0.95;
+  --noti-bg-darker: rgb(22, 22, 30);
+  --noti-bg-hover: rgb(41, 46, 66);
+  --noti-bg-focus: rgba(41, 46, 66, 0.8);
+  --noti-close-bg: rgba(192, 202, 245, 0.08);
+  --noti-close-bg-hover: rgba(247, 118, 142, 0.35);
+  --text-color: rgb(192, 202, 245);
+  --text-color-disabled: rgb(86, 95, 137);
+  --bg-selected: rgb(122, 162, 247);
+  --border-radius: 12px;
+  --notification-icon-size: 56px;
+  --font-size-body: 13px;
+  --font-size-summary: 14px;
+  --notification-shadow: 0 4px 16px rgba(11, 12, 20, 0.55);
+}
+
+* {
+  font-family: "JetBrainsMono Nerd Font", monospace;
+}
+
+.notification-row .notification-background .notification {
+  border: 1px solid var(--noti-border-color);
+}
+
+.notification .summary {
+  color: rgb(192, 202, 245);
+  font-weight: bold;
+}
+
+.notification .body {
+  color: rgb(169, 177, 214);
+}
+
+.notification .time {
+  color: rgb(86, 95, 137);
+}
+
+/* Urgency accents on the left edge */
+.notification.low {
+  border-left: 3px solid rgb(86, 95, 137);
+}
+.notification.normal {
+  border-left: 3px solid rgb(122, 162, 247);
+}
+.notification.critical {
+  border-left: 3px solid rgb(247, 118, 142);
+}
+
+.notification-action,
+.notification-default-action:hover {
+  border-radius: 8px;
+}
+
+.control-center {
+  border: 2px solid rgb(122, 162, 247);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(11, 12, 20, 0.6);
+}
+
+.widget-title > label {
+  color: rgb(192, 202, 245);
+  font-weight: bold;
+}
+
+.widget-title > button {
+  background: rgba(192, 202, 245, 0.08);
+  color: rgb(169, 177, 214);
+  border-radius: 8px;
+}
+
+.widget-title > button:hover {
+  background: rgba(247, 118, 142, 0.3);
+  color: rgb(192, 202, 245);
+}
+
+.widget-dnd switch:checked {
+  background: rgb(122, 162, 247);
+}
+
+.widget-mpris .widget-mpris-player {
+  border-radius: 12px;
+}

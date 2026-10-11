@@ -1,0 +1,11 @@
+[pyprland]
+plugins = ["scratchpads"]
+
+[scratchpads.spotify]
+command = "spotify"
+class = "Spotify"
+size = "75% 85%"
+animation = "fromTop"
+margin = 50
+lazy = true
+preserve_aspect = false
