@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Yazi
+GenericName=File Manager
+Comment=Blazing fast terminal file manager
+Exec=kitty --class tui-popup yazi %F
+Terminal=false
+Type=Application
+Icon=folder
+Categories=System;FileTools;FileManager;
+MimeType=inode/directory;
