@@ -3,7 +3,7 @@ plugins = ["scratchpads"]
 
 [scratchpads.spotify]
 command = "spotify"
-class = "Spotify"
+class = "spotify"  # native Wayland app_id (was "Spotify" under XWayland)
 size = "75% 85%"
 animation = "fromTop"
 margin = 50

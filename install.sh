@@ -83,6 +83,7 @@ create_link "quickshell"
 create_link "swaync"
 create_link "pypr"
 create_link "mimeapps.list"
+create_link "spotify-flags.conf"
 
 # Desktop entry overrides (open yazi/nvim inside kitty)
 mkdir -p "$HOME/.local/share/applications"
