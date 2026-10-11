@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Power menu (SUPER+SHIFT+M). Shutdown, reboot and logout ask for confirmation.
+
+THEME="$HOME/.config/rofi/power-menu.rasi"
+
+menu() { # menu <prompt> <options...>
+  local prompt=$1
+  shift
+  # power-menu.rasi shows the message line (not the prompt), so pass the text as -mesg
+  printf '%s\n' "$@" | rofi -dmenu -i -p "" -mesg "$prompt" -theme "$THEME"
+}
+
+confirm() { # confirm <action>; true if the user picks Yes
+  [[ $(menu "$1?" "󰜺  No" "󰄬  Yes") == "󰄬  Yes" ]]   # "No" first = default
+}
+
+uptime_str=$(uptime -p | sed 's/^up //')
+
+chosen=$(menu "󰐥  up $uptime_str" \
+  "󰌾  Lock" \
+  "󰤄  Suspend" \
+  "󰍃  Logout" \
+  "󰜉  Reboot" \
+  "󰐥  Shutdown")
+
+case "$chosen" in
+  *Lock) pidof hyprlock || hyprlock ;;
+  *Suspend) systemctl suspend ;;   # hypridle locks before sleep
+  *Logout) confirm "Log out" && hyprctl dispatch 'hl.dsp.exit()' ;;
+  *Reboot) confirm "Reboot" && systemctl reboot ;;
+  *Shutdown) confirm "Shut down" && systemctl poweroff ;;
+esac

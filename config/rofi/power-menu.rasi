@@ -1,0 +1,85 @@
+/**
+ * ROFI TOKYO NIGHT POWER MENU
+ * Center-aligned power menu with icons
+ */
+
+configuration {
+    font: "JetBrainsMono Nerd Font 12";
+    show-icons: false;
+    display-power-menu: "⏻ Power Menu";
+}
+
+* {
+    /* Tokyo Night Color Palette */
+    bg-base:      #1a1b26;
+    bg-selected:  #7aa2f7;
+    fg-text:      #c0caf5;
+    fg-selected:  #15161e;
+    border-col:   #7aa2f7;
+    
+    background-color: @bg-base;
+    text-color:       @fg-text;
+    margin:           0;
+    padding:          0;
+}
+
+window {
+    transparency: "real";
+    location: center;
+    anchor:   center;
+    
+    width: 420px;
+    border: 2px;
+    border-color: @border-col;
+    border-radius: 12px;
+    background-color: rgba(26, 27, 38, 0.9);
+    padding: 20px;
+}
+
+mainbox {
+    children: [ message, listview ];
+    background-color: transparent;
+    spacing: 15px;
+}
+
+message {
+    background-color: transparent;
+    border: 0;
+    padding: 10px;
+}
+
+textbox {
+    text-color: @border-col;
+    background-color: transparent;
+    horizontal-align: 0.5;
+    font: "JetBrainsMono Nerd Font Bold 14";
+}
+
+listview {
+    lines: 5;
+    columns: 1;
+    scrollbar: false;
+    background-color: transparent;
+    spacing: 8px;
+}
+
+element {
+    padding: 12px 15px;
+    border-radius: 8px;
+    background-color: rgba(86, 95, 137, 0.15);
+    text-color: @fg-text;
+    cursor: pointer;
+}
+
+element selected {
+    background-color: @bg-selected;
+    text-color: @fg-selected;
+    font: "JetBrainsMono Nerd Font Bold 12";
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
+}

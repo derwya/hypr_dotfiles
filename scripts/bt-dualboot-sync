@@ -1,0 +1,219 @@
+#!/usr/bin/env python3
+"""Copy Bluetooth pairing keys from Windows into BlueZ, for dual boot.
+
+Windows and Linux share the adapter but each generates its own link key when
+pairing, so a device paired in one OS stops working in the other. After pairing
+a device in Linux and then in Windows (in that order), run this from Linux to
+give BlueZ the key Windows negotiated; both systems then use the same key.
+
+    sudo bt-dualboot-sync --dry-run    # show what would change
+    sudo bt-dualboot-sync              # apply, then restart bluetooth
+
+Classic (BR/EDR) devices only: headphones, speakers, most controllers.
+Bluetooth LE devices (many mice/keyboards) are listed but not touched.
+Needs: chntpw (for `reged`). The Windows partition is mounted read-only.
+"""
+
+import argparse
+import configparser
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+from datetime import datetime
+from pathlib import Path
+
+BLUEZ_DIR = Path("/var/lib/bluetooth")
+HIVE_REL = Path("Windows/System32/config/SYSTEM")
+KEYS_PATH = r"\ControlSet{:03d}\Services\BTHPORT\Parameters\Keys"
+
+
+def die(msg):
+    print(f"error: {msg}", file=sys.stderr)
+    sys.exit(1)
+
+
+def mac_colon(raw):
+    return ":".join(raw[i:i + 2] for i in range(0, 12, 2)).upper()
+
+
+def run(cmd, **kw):
+    return subprocess.run(cmd, check=False, capture_output=True, text=True, **kw)
+
+
+# ── Windows side ──────────────────────────────────────────────────────────────
+
+def ntfs_partitions():
+    out = run(["lsblk", "-rpno", "NAME,FSTYPE"]).stdout
+    return [l.split()[0] for l in out.splitlines() if l.split()[1:2] == ["ntfs"]]
+
+
+def mount_ro(dev, target):
+    for fs, opts in (("ntfs3", "ro"), ("ntfs-3g", "ro"), ("ntfs3", "ro,force")):
+        if run(["mount", "-t", fs, "-o", opts, dev, target]).returncode == 0:
+            return True
+    return False
+
+
+def copy_hive(partition, workdir):
+    """Find the Windows SYSTEM hive (on `partition` or any NTFS partition) and copy it out."""
+    candidates = [partition] if partition else ntfs_partitions()
+    for dev in candidates:
+        mnt = tempfile.mkdtemp(prefix="bt-dualboot-")
+        try:
+            if not mount_ro(dev, mnt):
+                continue
+            hive = Path(mnt) / HIVE_REL
+            if hive.is_file():
+                dest = Path(workdir) / "SYSTEM"
+                shutil.copyfile(hive, dest)
+                return dev, dest
+        finally:
+            run(["umount", mnt])
+            os.rmdir(mnt)
+    die("could not find Windows (Windows/System32/config/SYSTEM) on "
+        + (partition or "any NTFS partition")
+        + ". If Windows uses Fast Startup/hibernation, disable it and shut down fully.")
+
+
+def reged_export(hive, key, workdir):
+    out = Path(workdir) / "export.reg"
+    out.unlink(missing_ok=True)
+    r = run(["reged", "-x", str(hive), r"HKEY_LOCAL_MACHINE\SYSTEM", key, str(out)])
+    if not out.exists():
+        return None
+    raw = out.read_bytes()
+    text = raw.decode("utf-16") if raw[:2] in (b"\xff\xfe", b"\xfe\xff") else raw.decode("latin-1")
+    return text if "[" in text else None
+
+
+def parse_reg(text):
+    """Parse a .reg export into {key_path: {value_name: value_string}}."""
+    text = re.sub(r"\\\r?\n\s*", "", text)  # join continued hex lines
+    keys, current = {}, None
+    for line in text.splitlines():
+        line = line.strip()
+        if line.startswith("[") and line.endswith("]"):
+            current = keys.setdefault(line[1:-1], {})
+        elif current is not None and line.startswith('"') and "=" in line:
+            name, _, value = line.partition("=")
+            current[name.strip('"').lower()] = value
+    return keys
+
+
+def current_control_set(hive, workdir):
+    text = reged_export(hive, r"\Select", workdir)
+    if text:
+        m = re.search(r'"Current"=dword:([0-9a-fA-F]+)', text)
+        if m:
+            return int(m.group(1), 16)
+    return 1
+
+
+def windows_keys(hive, adapter, workdir):
+    """Return ({device_mac: link_key_hex}, [le_device_macs]) Windows has for `adapter`."""
+    cs = current_control_set(hive, workdir)
+    base = KEYS_PATH.format(cs) + "\\" + adapter.replace(":", "").lower()
+    text = reged_export(hive, base, workdir)
+    if not text:
+        return {}, []
+    classic, le = {}, []
+    for path, values in parse_reg(text).items():
+        tail = path.rsplit("\\", 1)[-1].lower()
+        if re.fullmatch(r"[0-9a-f]{12}", tail) and tail != adapter.replace(":", "").lower():
+            le.append(mac_colon(tail))  # LE devices are stored as subkeys
+            continue
+        for name, value in values.items():
+            if re.fullmatch(r"[0-9a-f]{12}", name) and value.startswith("hex:"):
+                key = value[4:].replace(",", "").upper()
+                if len(key) == 32:
+                    classic[mac_colon(name)] = key
+    return classic, le
+
+
+# ── BlueZ side ────────────────────────────────────────────────────────────────
+
+def read_info(path):
+    cp = configparser.ConfigParser(interpolation=None, strict=False)
+    cp.optionxform = str
+    cp.read(path)
+    return cp
+
+
+def device_name(cp, mac):
+    return cp.get("General", "Name", fallback=mac) if cp.has_section("General") else mac
+
+
+def update_device(info, key, dry_run):
+    cp = read_info(info)
+    old = cp.get("LinkKey", "Key", fallback=None)
+    if old and old.upper() == key:
+        return "already in sync"
+    if dry_run:
+        return f"would set link key ({'replace' if old else 'add'})"
+    backup = info.with_name(f"info.bak-{datetime.now():%Y%m%d-%H%M%S}")
+    shutil.copy2(info, backup)
+    if not cp.has_section("LinkKey"):
+        cp.add_section("LinkKey")
+        cp.set("LinkKey", "Type", "4")
+        cp.set("LinkKey", "PINLength", "0")
+    cp.set("LinkKey", "Key", key)
+    with open(info, "w") as f:
+        cp.write(f, space_around_delimiters=False)
+    return f"updated (backup: {backup.name})"
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    ap.add_argument("-n", "--dry-run", action="store_true", help="show changes without writing")
+    ap.add_argument("-p", "--partition", help="Windows partition, e.g. /dev/nvme0n1p2 (default: autodetect)")
+    ap.add_argument("--hive", help="use an already copied SYSTEM hive file instead of mounting")
+    ap.add_argument("--bluez-dir", type=Path, default=BLUEZ_DIR, help=argparse.SUPPRESS)
+    args = ap.parse_args()
+
+    if not shutil.which("reged"):
+        die("reged not found; install it with: sudo pacman -S chntpw")
+    if os.geteuid() != 0 and args.bluez_dir == BLUEZ_DIR:
+        die("run with sudo (BlueZ keys and mounting need root)")
+
+    adapters = [d for d in args.bluez_dir.iterdir() if re.fullmatch(r"([0-9A-F]{2}:){5}[0-9A-F]{2}", d.name)]
+    if not adapters:
+        die(f"no Bluetooth adapters in {args.bluez_dir}")
+
+    with tempfile.TemporaryDirectory() as work:
+        if args.hive:
+            hive = Path(args.hive)
+            print(f"Windows registry: {hive}")
+        else:
+            dev, hive = copy_hive(args.partition, work)
+            print(f"Windows registry: {dev} (mounted read-only)")
+
+        changed = 0
+        for adapter_dir in adapters:
+            adapter = adapter_dir.name
+            keys, le = windows_keys(hive, adapter, work)
+            print(f"\nAdapter {adapter}: Windows knows {len(keys)} classic device(s)")
+            if not keys and not le:
+                print("  nothing paired in Windows for this adapter")
+            for mac, key in sorted(keys.items()):
+                info = adapter_dir / mac / "info"
+                if not info.exists():
+                    print(f"  {mac}: not paired in Linux; pair it here first, then in Windows, then rerun")
+                    continue
+                result = update_device(info, key, args.dry_run)
+                changed += result.startswith("updated")
+                print(f"  {device_name(read_info(info), mac)} ({mac}): {result}")
+            for mac in le:
+                print(f"  {mac}: Bluetooth LE device, skipped (not supported by this script)")
+
+    if changed and args.bluez_dir == BLUEZ_DIR:
+        r = run(["systemctl", "restart", "bluetooth"])
+        print("\nRestarted bluetooth." if r.returncode == 0 else "\nUpdated keys; restart bluetooth to apply.")
+    elif args.dry_run:
+        print("\nDry run, nothing written.")
+
+
+if __name__ == "__main__":
+    main()

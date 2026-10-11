@@ -1,24 +1,35 @@
 configuration {
-    modi: "drun,run,filebrowser,window,calc";
+    modi: "drun,run,recursivebrowser,window,calc";
     
     show-icons: true;
     terminal: "kitty";
-    drun-display-format: "{name} ";
+    drun-display-format: "{name}[<span size='small' alpha='55%'>   {generic}</span>]";
+    matching: "fuzzy";
+    sort: true;
+    sorting-method: "fzf";
     location: 0;
     disable-history: false;
     hide-scrollbar: true;
 
-    
+
+    recursivebrowser {
+        directory: "~/";
+        filter-regex: "(.*cache.*|.*\\.o)";
+        command: "xdg-open";
+    }
+
+  
+
     run-command: "/bin/bash -c '{cmd}'";
 
     run-shell-command: "kitty -e /bin/bash -c '{cmd}'";
 
     
-    display-drun: " Apps ";
-    display-run: " Run ";
-    display-filebrowser: " Files ";
-    display-window: " Window ";
-    display-calc: " Calc "; 
+    display-drun: "󰀻  Apps";
+    display-run: "󰜎  Run";
+    display-recursivebrowser: "󰉋  Files";
+    display-window: "󰖯  Windows";
+    display-calc: "󰃬  Calc";
     
     sidebar-mode: true;
 }

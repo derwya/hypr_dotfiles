@@ -1,6 +1,6 @@
 /**
  * ROFI TOKYO NIGHT THEME (Left-Side Popup)
- * Matches Waybar margins and colors - mirrors config-right
+ * Matches Waybar margins and colors
  */
 
 configuration {
@@ -35,7 +35,7 @@ window {
     border: 2px;
     border-color: @border-col;
     border-radius: 10px;
-    background-color: @bg-base;
+    background-color: rgba(26, 27, 38, 0.9);
     padding: 10px;
 }
 
