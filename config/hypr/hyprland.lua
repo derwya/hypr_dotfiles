@@ -147,6 +147,13 @@ hl.config({
         hide_on_key_press = true,
     },
 
+    -- X11 apps render at native resolution instead of being upscaled (blurry) to
+    -- the 5/3 scale. Apps scale themselves: Gazebo/RViz via QT_SCALE_FACTOR in
+    -- ~/.bashrc (distrobox), Spotify runs native Wayland (~/.config/spotify-flags.conf).
+    xwayland = {
+        force_zero_scaling = true,
+    },
+
     misc = {
         force_default_wallpaper  = 0,
         disable_hyprland_logo    = true,
