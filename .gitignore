@@ -13,3 +13,32 @@ waybar_auto_hide/target/
 waybar_auto_hide/Cargo.lock
 
 # !waybar_auto_hide/target/release/waybar_auto_hide
+
+# Dated backups made while editing (e.g. hyprlock.conf.bak-2026-10-11)
+*.bak-*
+
+# Self-links created when install.sh links into an existing folder (config/X/X -> config/X)
+config/anyrun/anyrun
+config/btop/btop
+config/doom/doom
+config/gtk-3.0/gtk-3.0
+config/gtk-4.0/gtk-4.0
+config/nvim/nvim
+config/qt5ct/qt5ct
+config/qt6ct/qt6ct
+config/rofi/rofi
+config/vesktop/vesktop
+config/waybar/waybar
+
+# Vesktop runtime data: caches, locks and the logged-in Discord session (secrets!)
+config/vesktop/Code Cache/
+config/vesktop/Crashpad/
+config/vesktop/Singleton*
+config/vesktop/sessionData/
+config/vesktop/state.json
+
+# Separate git repo (kitty plugin), not part of these dotfiles
+config/kitty/kitty-kitten-search/
+
+# Old unused copy; the real binary is config/hypr/scripts/waybar_auto_hide
+config/waybar/scripts/waybar_auto_hide
