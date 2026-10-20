@@ -1,12 +1,12 @@
-// Popup widgets for network, bluetooth and audio (replaces the rofi menus).
+// Popup widgets for network, bluetooth, audio, calendar and battery (replaces the rofi menus).
 //
 // Run:     qs -c widgets -n -d
-// Toggle:  qs -c widgets ipc call widgets toggle network|bluetooth|audio|calendar
+// Toggle:  qs -c widgets ipc call widgets toggle network|bluetooth|audio|calendar|power
 //          qs -c widgets ipc call widgets toggleBottom <name>   (from a bottom bar)
 // Close:   qs -c widgets ipc call widgets close
 //
 // One popup at a time, on the focused monitor, under the bar: top-right for
-// network/bluetooth/audio, centered (under the clock) for the calendar,
+// network/bluetooth/audio/power, centered (under the clock) for the calendar,
 // (same spot as the old rofi popups). From a bottom bar (toggleBottom) popups
 // open bottom-right, just above the bar. Click outside or Esc closes it.
 
@@ -21,7 +21,7 @@ import Quickshell.Networking
 ShellRoot {
     id: root
 
-    property string active: ""        // "network" | "bluetooth" | "audio" | "calendar" | ""
+    property string active: ""        // "network" | "bluetooth" | "audio" | "calendar" | "power" | ""
     property string screenName: ""
     property string edge: "top"       // "top" | "bottom": which bar opened it
 
@@ -36,7 +36,7 @@ ShellRoot {
     readonly property int netDevices: Networking.devices.values.length
 
     function open(name, fromEdge) {
-        if (!["network", "bluetooth", "audio", "calendar"].includes(name)) return;
+        if (!["network", "bluetooth", "audio", "calendar", "power"].includes(name)) return;
         screenName = Hyprland.focusedMonitor ? Hyprland.focusedMonitor.name : "";
         edge = fromEdge === "bottom" ? "bottom" : "top";
         active = name;
@@ -123,7 +123,8 @@ ShellRoot {
                     sourceComponent: root.active === "network" ? networkPanel
                                    : root.active === "bluetooth" ? bluetoothPanel
                                    : root.active === "audio" ? audioPanel
-                                   : root.active === "calendar" ? calendarPanel : null
+                                   : root.active === "calendar" ? calendarPanel
+                                   : root.active === "power" ? powerPanel : null
                 }
             }
         }
@@ -144,5 +145,9 @@ ShellRoot {
     Component {
         id: calendarPanel
         CalendarPanel { onCloseRequested: root.close() }
+    }
+    Component {
+        id: powerPanel
+        PowerPanel { onCloseRequested: root.close() }
     }
 }

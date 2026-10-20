@@ -175,7 +175,8 @@
       "󰂀",
       "󰁹"
     ],
-    "tooltip-format": "{timeTo} · {power:.1f} W"
+    "tooltip-format": "{timeTo} · {power:.1f} W",
+    "on-click": "qs -c widgets ipc call widgets toggle power"
   },
   "backlight": {
     "format": "{icon} {percent}%",
