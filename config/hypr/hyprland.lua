@@ -8,17 +8,35 @@ local widget = "qs -c widgets ipc call widgets toggle "
 local scripts = "~/.config/hypr/scripts/"
 
 
+-----------------------
+---- MACHINE (HOST) ----
+-----------------------
+
+-- Per-machine settings (monitors, GPU env, laptop extras) live in
+-- hosts/<hostname>.lua; machines without a profile use hosts/default.lua
+-- (laptop, integrated graphics). Test another profile: HYPR_HOST=name Hyprland --verify-config
+local function hostname()
+    local f = io.open("/etc/hostname")
+    local name = f and f:read("l")
+    if f then f:close() end
+    return name or "default"
+end
+
+local HOSTNAME = os.getenv("HYPR_HOST") or hostname()
+local ok, HOST = pcall(require, "hosts." .. HOSTNAME)
+if not ok then
+    HOST = require("hosts.default")
+end
+
+
 ------------------
 ---- MONITORS ----
 ------------------
 
--- The one place monitors are defined. Workspaces listed here open on that
--- monitor; bars.sh reads the same mapping back from Hyprland, so the waybar
--- workspace buttons follow it too. Scale 5/3 divides both resolutions exactly.
-local MONITORS = {
-    { output = "DP-2",     mode = "2560x1440@143.86", position = "1152x0", scale = "1.666667", workspaces = { 1, 2, 3, 4, 5 } },
-    { output = "HDMI-A-1", mode = "1920x1080@60",     position = "0x340",  scale = "1.666667", workspaces = { 6, 7, 8, 9, 10 } },
-}
+-- The one place monitors are defined (the host profile). Workspaces listed
+-- there open on that monitor; bars.sh reads the same mapping back from
+-- Hyprland, so the waybar workspace buttons follow it too.
+local MONITORS = HOST.monitors
 
 local workspaceMonitor = {}
 for _, m in ipairs(MONITORS) do
@@ -58,6 +76,14 @@ hl.on("hyprland.start", function()
     hl.exec_cmd('gsettings set org.gnome.desktop.interface gtk-theme "Tokyonight-Dark"')
     hl.exec_cmd('gsettings set org.gnome.desktop.interface icon-theme "Tokyonight-Dark"')
     hl.exec_cmd('gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"')
+
+    -- Always start on the main monitor's first workspace (1), not wherever the
+    -- cursor happened to be.
+    local main = MONITORS[1]
+    if main and hl.get_monitor(main.output) then
+        hl.dispatch(hl.dsp.focus({ monitor = main.output }))
+    end
+    hl.dispatch(hl.dsp.focus({ workspace = main and main.workspaces[1] or 1 }))
 end)
 
 
@@ -65,12 +91,10 @@ end)
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
 
--- NVIDIA
-hl.env("NVD_BACKEND", "direct")
-hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
-hl.env("GBM_BACKEND", "nvidia-drm")
-hl.env("LIBVA_DRIVER_NAME", "nvidia")
-hl.env("__VK_LAYER_NV_optimus", "NVIDIA_only")
+-- Machine-specific (e.g. NVIDIA on the desktop), from the host profile
+for name, value in pairs(HOST.env or {}) do
+    hl.env(name, value)
+end
 
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 hl.env("GDK_SCALE", "1")
@@ -163,6 +187,11 @@ hl.config({
         focus_on_activate        = true,
     },
 })
+
+-- Laptops: swipe three fingers left/right on the touchpad to switch workspaces.
+if HOST.laptop then
+    hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
+end
 
 -- Curves
 hl.curve("smooth",  { type = "bezier", points = { { 0.25, 1 },   { 0.5, 1 }  } })

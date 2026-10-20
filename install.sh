@@ -99,7 +99,9 @@ for f in bt-dualboot-sync rofi-power-menu; do
 done
 
 mkdir -p "$HOME/Pictures/wallpapers/tokyonight-wallpapers"
-ln -sf "$DOTFILES_DIR/wallpapers/"* "$HOME/Pictures/wallpapers/tokyonight-wallpapers/"
+# drop links to wallpapers that no longer exist (the set was replaced), then link the current ones
+find "$HOME/Pictures/wallpapers/tokyonight-wallpapers" -maxdepth 1 -xtype l -delete
+ln -sf "$DOTFILES_DIR/wallpapers/"*.{png,jpg,jpeg} "$HOME/Pictures/wallpapers/tokyonight-wallpapers/" 2>/dev/null
 
 mkdir -p "$BIN_DIR"
 RUST_PROJECT="$DOTFILES_DIR/waybar_auto_hide"

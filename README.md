@@ -33,6 +33,20 @@ chmod +x install.sh
 3. **Restart:**
 Restart Hyprland or reboot your system.
 
+## 💻 Multiple machines
+
+One config for the desktop and the laptop. Machine-specific settings (monitors,
+GPU environment, laptop extras) live in `config/hypr/hosts/<hostname>.lua`;
+any machine without its own file uses `hosts/default.lua` (laptop with
+integrated graphics, built-in `eDP-1` screen). Waybar adapts at launch
+(`bars.sh`): GPU stats only with NVIDIA, battery/brightness only where present.
+
+To give a machine its own profile: `cp config/hypr/hosts/default.lua config/hypr/hosts/$(hostnamectl hostname).lua`
+and edit it. Check a profile without switching: `HYPR_HOST=<name> Hyprland --verify-config`.
+
+Updating another machine: `git pull`, then `./install.sh` (installs missing
+packages and links new configs), then log out and back in.
+
 ## 🛠️ Credits & Resources
 
 Special thanks to the creators of the awesome tools and assets used in this setup:
