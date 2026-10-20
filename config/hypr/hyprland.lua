@@ -124,7 +124,7 @@ hl.config({
         gaps_out    = 10,
         border_size = 2,
         col = {
-            -- Tokyo Night blue → purple → cyan, slowly rotating (borderangle animation below)
+            -- Tokyo Night blue → purple → cyan, slowly rotating on the desktop (borderangle animation below)
             active_border   = { colors = { "rgba(7aa2f7ff)", "rgba(bb9af7ff)", "rgba(7dcfffff)" }, angle = 45 },
             inactive_border = "rgba(3b426199)",
         },
@@ -211,7 +211,9 @@ hl.animation({ leaf = "windowsIn",     enabled = true, speed = 4,   spring = "sn
 hl.animation({ leaf = "windowsOut",    enabled = true, speed = 2.5, bezier = "ease",    style = "popin 85%" })
 hl.animation({ leaf = "windowsMove",   enabled = true, speed = 4,   spring = "snappy" })
 hl.animation({ leaf = "border",        enabled = true, speed = 6,   bezier = "smooth" })
-hl.animation({ leaf = "borderangle",   enabled = true, speed = 90,  bezier = "linear",  style = "loop" })
+-- The endless rotation redraws the focused window every frame; on the laptop's
+-- iGPU that keeps the GPU ~35% busier (no RC6 idle), so the gradient stays still there.
+hl.animation({ leaf = "borderangle",   enabled = not HOST.laptop, speed = 90,  bezier = "linear",  style = "loop" })
 hl.animation({ leaf = "fade",          enabled = true, speed = 4,   bezier = "smooth" })
 hl.animation({ leaf = "fadeDim",       enabled = true, speed = 4,   bezier = "smooth" })
 hl.animation({ leaf = "layersIn",      enabled = true, speed = 3,   bezier = "smooth",  style = "fade" })
