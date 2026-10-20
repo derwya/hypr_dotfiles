@@ -188,6 +188,11 @@ hl.config({
     },
 })
 
+-- Machine-specific input (e.g. touchpad speed on the laptop), from the host profile
+if HOST.input then
+    hl.config({ input = HOST.input })
+end
+
 -- Laptops: swipe three fingers left/right on the touchpad to switch workspaces.
 if HOST.laptop then
     hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
@@ -375,6 +380,7 @@ end
 
 -- Workspaces: SUPER+1..0 jumps to the workspace on its own monitor; SHIFT moves the
 -- window there. If that monitor is unplugged, the workspace simply opens where you are.
+-- Only the workspaces listed in the host profile get keys (laptop: 1-5).
 local function focusHome(ws)
     local mon = workspaceMonitor[ws]
     if mon and hl.get_monitor(mon) then
@@ -383,15 +389,17 @@ local function focusHome(ws)
 end
 
 for ws = 1, 10 do
-    local key = tostring(ws % 10) -- 10 maps to key 0
-    bind(key, function()
-        focusHome(ws)
-        hl.dispatch(hl.dsp.focus({ workspace = ws }))
-    end)
-    bind("SHIFT + " .. key, function()
-        hl.dispatch(hl.dsp.window.move({ workspace = ws }))
-        focusHome(ws)
-    end)
+    if workspaceMonitor[ws] then
+        local key = tostring(ws % 10) -- 10 maps to key 0
+        bind(key, function()
+            focusHome(ws)
+            hl.dispatch(hl.dsp.focus({ workspace = ws }))
+        end)
+        bind("SHIFT + " .. key, function()
+            hl.dispatch(hl.dsp.window.move({ workspace = ws }))
+            focusHome(ws)
+        end)
+    end
 end
 
 bind("TAB",        hl.dsp.focus({ workspace = "previous" }))
