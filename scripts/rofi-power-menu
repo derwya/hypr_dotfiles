@@ -14,6 +14,16 @@ confirm() { # confirm <action>; true if the user picks Yes
   [[ $(menu "$1?" "󰜺  No" "󰄬  Yes") == "󰄬  Yes" ]]   # "No" first = default
 }
 
+# Stop distrobox/podman containers first. With the NVIDIA ROS container still
+# running, the system froze during shutdown (last Hyprland frame stuck on screen).
+stop_containers() {
+  command -v podman >/dev/null || return 0
+  [[ -n $(podman ps -q 2>/dev/null) ]] || return 0
+  notify-send -a power -t 3000 "Stopping containers…"
+  podman stop --all --time 10 >/dev/null 2>&1
+  return 0   # never block the shutdown itself
+}
+
 uptime_str=$(uptime -p | sed 's/^up //')
 
 chosen=$(menu "󰐥  up $uptime_str" \
@@ -26,7 +36,7 @@ chosen=$(menu "󰐥  up $uptime_str" \
 case "$chosen" in
   *Lock) pidof hyprlock || hyprlock ;;
   *Suspend) systemctl suspend ;;   # hypridle locks before sleep
-  *Logout) confirm "Log out" && hyprctl dispatch 'hl.dsp.exit()' ;;
-  *Reboot) confirm "Reboot" && systemctl reboot ;;
-  *Shutdown) confirm "Shut down" && systemctl poweroff ;;
+  *Logout) confirm "Log out" && stop_containers && hyprctl dispatch 'hl.dsp.exit()' ;;
+  *Reboot) confirm "Reboot" && stop_containers && systemctl reboot ;;
+  *Shutdown) confirm "Shut down" && stop_containers && systemctl poweroff ;;
 esac
