@@ -487,3 +487,65 @@ window#waybar.bottom .modules-right {
 #network.disabled {
     color: #f7768e;
 }
+
+/* ========================================
+   WORKSPACE BUTTONS (custom/ws-N, see bars.sh)
+   Same look as the old hyprland/workspaces buttons.
+   ======================================== */
+
+.ws {
+    padding: 0 6px;
+    margin: 0 3px;
+    min-width: 20px;
+    min-height: 32px;
+    border-radius: 10px;
+    color: #565f89;
+    background: rgba(86, 95, 137, 0.15);
+    font-weight: bold;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ws.occupied {
+    color: #a9b1d6;
+    background: rgba(122, 162, 247, 0.14);
+}
+
+.ws.active {
+    color: #1a1b26;
+    background: linear-gradient(135deg, #7aa2f7 0%, #bb9af7 100%);
+    box-shadow: 0 0 5px rgba(122, 162, 247, 0.5);
+    font-weight: 900;
+}
+
+.ws:hover {
+    color: #7aa2f7;
+    background: rgba(122, 162, 247, 0.25);
+}
+
+/* ========================================
+   LAPTOP MODULES (added by bars.sh when a battery/backlight exists)
+   ======================================== */
+
+#battery {
+    color: #9ece6a;
+    padding: 4px 8px;
+}
+
+#battery.charging,
+#battery.plugged {
+    color: #7dcfff;
+}
+
+#battery.warning:not(.charging) {
+    color: #e0af68;
+}
+
+#battery.critical:not(.charging) {
+    color: #f7768e;
+    animation: blink 0.5s linear infinite;
+}
+
+#backlight {
+    color: #e0af68;
+    padding: 4px 8px;
+}

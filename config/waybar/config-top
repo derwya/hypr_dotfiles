@@ -158,5 +158,34 @@
     "on-click": "swaync-client -t -sw",
     "on-click-right": "swaync-client -d -sw",
     "escape": true
+  },
+  "battery": {
+    "interval": 30,
+    "states": {
+      "warning": 25,
+      "critical": 12
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": "󰚥 {capacity}%",
+    "format-icons": [
+      "󰁺",
+      "󰁼",
+      "󰁾",
+      "󰂀",
+      "󰁹"
+    ],
+    "tooltip-format": "{timeTo} · {power:.1f} W"
+  },
+  "backlight": {
+    "format": "{icon} {percent}%",
+    "format-icons": [
+      "󰃞",
+      "󰃟",
+      "󰃠"
+    ],
+    "on-scroll-up": "brightnessctl s 5%+",
+    "on-scroll-down": "brightnessctl s 5%-",
+    "tooltip": false
   }
 }
