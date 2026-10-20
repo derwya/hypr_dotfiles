@@ -49,10 +49,11 @@ rules=$(hyprctl workspacerules -j)
 # backlight), so the shared bar configs are adapted at launch.
 hw=$(jq -n \
   --argjson nvidia "$(nvidia-smi -L >/dev/null 2>&1 && echo true || echo false)" \
+  --argjson intelgpu "$(grep -qx 0x8086 /sys/class/drm/card[0-9]/device/vendor 2>/dev/null && echo true || echo false)" \
   --argjson battery "$(compgen -G '/sys/class/power_supply/BAT*' >/dev/null && echo true || echo false)" \
   --argjson backlight "$(compgen -G '/sys/class/backlight/*' >/dev/null && echo true || echo false)" \
   --argjson cpusensor "$([[ -d $(jq -r '.temperature["hwmon-path-abs"] // "/nonexistent"' "$WAYBAR_DIR/config-top") ]] && echo true || echo false)" \
-  '{nvidia: $nvidia, battery: $battery, backlight: $backlight, cpusensor: $cpusensor}')
+  '{nvidia: $nvidia, intelgpu: $intelgpu, battery: $battery, backlight: $backlight, cpusensor: $cpusensor}')
 
 # Live workspace-button updates (one listener for all bars).
 pkill -f '[w]s-events.sh'
@@ -67,7 +68,8 @@ launch() { # launch <monitor> <side> <base config>
   # custom button per workspace of this monitor (ws-status.sh, refreshed by ws-events.sh).
   jq --arg m "$mon" --argjson ws "$ws" --arg wsdir "$WAYBAR_DIR/scripts" --argjson hw "$hw" '
       .output = $m
-      | if $hw.nvidia | not then .["modules-left"] |= (. // [] | map(select(. != "custom/gpu"))) else . end
+      | if ($hw.nvidia or $hw.intelgpu) | not then .["modules-left"] |= (. // [] | map(select(. != "custom/gpu"))) else . end
+      | if (.["custom/gpu"] and ($hw.nvidia | not)) then .["custom/gpu"] |= del(.["on-click"]) else . end
       | if (.temperature and ($hw.cpusensor | not))
         then .temperature |= del(.["hwmon-path-abs"], .["input-filename"]) else . end
       | if ($hw.battery and (.["modules-right"] // [] | index("custom/notification")))
